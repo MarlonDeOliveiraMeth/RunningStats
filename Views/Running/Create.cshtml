@@ -1,0 +1,71 @@
+﻿@model RunningStats.Models.RunningModel
+
+@{
+    ViewData["Title"] = "Adicionar";
+}
+
+<h1>Adicionar</h1>
+
+<br />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create" class="needs-validation">
+            <div class="form-group">
+                <label class="control-label">Metros</label>
+                <input asp-for="Meters" class="form-control" oninput="this.value = this.value.slice(0, 5)" required />
+                <div class="valid-feedback">
+                    Ótimo!
+                </div>
+                <div class="invalid-feedback">
+                    Esse campo precisa ser preenchido.
+                </div>
+            </div>
+            <br />
+            <div class="form-group">
+                <label class="control-label">Minutos</label>
+                <input asp-for="Minutes" class="form-control" oninput="if(this.value > 1440) this.value = 1440" required />
+                <div class="valid-feedback">
+                    Ótimo!
+                </div>
+                <div class="invalid-feedback">
+                    Esse campo precisa ser preenchido.
+                </div>
+            </div>
+            <br />
+            <div class="form-group">
+                <label class="control-label">Data</label>
+                <input asp-for="Date" class="form-control" id="inputDate" required />
+                <div class="valid-feedback">
+                    Ótimo!
+                </div>
+                <div class="invalid-feedback">
+                    Esse campo precisa ser preenchido.
+                </div>
+            </div>
+            <br />
+            <div class="form-group">
+                <input type="submit" value="Adicionar" class="btn btn-dark" />
+                <a asp-action="Index" class="btn btn-secondary">Voltar</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    const inputDate = document.getElementById('inputDate');
+
+    const currentDate = new Date().toISOString().split('T')[0];
+
+    inputDate.value = currentDate;
+
+    inputDate.addEventListener('change', function () {
+        const selectedDate = this.value;
+        if (selectedDate > currentDate) {
+            this.value = currentDate;
+        }
+    });
+</script>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

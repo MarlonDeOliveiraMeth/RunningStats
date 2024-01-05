@@ -1,0 +1,46 @@
+﻿@model IEnumerable<RunningStats.Models.RunningModel>
+
+@{
+    ViewData["Title"] = "Dados";
+}
+
+<h1>Dados</h1>
+
+<br />
+<table class="table table-striped text-center">
+    <thead class="table-dark">
+        <tr>
+            <th>
+                Metros
+            </th>
+            <th>
+                Minutos
+            </th>
+            <th>
+                Data
+            </th>
+            <th>
+                Ação
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Meters)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Minutes)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Date)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.RunningId" class="btn btn-secondary">Editar</a>
+                <a asp-action="Delete" asp-route-id="@item.RunningId" class="btn btn-danger">Excluir</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

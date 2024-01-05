@@ -1,0 +1,306 @@
+﻿@model IEnumerable<RunningStats.Models.RunningModel>
+@{
+    ViewData["Title"] = "Dashboard";
+}
+
+<div class="container">
+    <div class="row">
+        <div class="col">
+            <div class="row row-cols-2">
+                <div class="col">
+                    <div class="card border-dark mb-3 text-center shadow">
+                        <h6 class="card-header card-title text-white bg-dark">Total de metros percorridos</h6>
+                        <div class="card-body text-dark">
+                            @{
+                                var totalMeters = 0;
+                                foreach (var item in Model)
+                                {
+                                    totalMeters += item.Meters;
+                                }
+                            }
+                            @if (totalMeters > 0)
+                            {
+                                <p class="card-text fs-5">@totalMeters</p>
+                            }
+                            else
+                            {
+                                <p class="card-text fs-5">Ainda não há dados</p>
+                            }
+                        </div>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="card border-dark mb-3 text-center shadow">
+                        <h6 class="card-header card-title text-white bg-dark">Total de minutos percorridos</h6>
+                        <div class="card-body text-dark">
+                            @{
+                                var totalMinutes = 0;
+                                foreach (var item in Model)
+                                {
+                                    totalMinutes += item.Minutes;
+                                }
+                            }
+                            @if (totalMinutes > 0)
+                            {
+                                <p class="card-text fs-5">@totalMinutes</p>
+                            }
+                            else
+                            {
+                                <p class="card-text fs-5">Ainda não há dados</p>
+                            }
+                        </div>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="card border-dark mb-3 text-center shadow">
+                        <h6 class="card-header card-title text-white bg-dark">Total de dias exercitados</h6>
+                        <div class="card-body text-dark">
+                            @{
+                                var totalDays = Model.Count();
+                            }
+                            @if (totalDays > 0)
+                            {
+                                <p class="card-text fs-5">@totalDays</p>
+                            }
+                            else
+                            {
+                                <p class="card-text fs-5">Ainda não há dados</p>
+                            }
+                        </div>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="card border-dark mb-3 text-center shadow">
+                        <h6 class="card-header card-title text-white bg-dark">Maior distância percorrida</h6>
+                        <div class="card-body text-dark">
+                            @{
+                                var maxMeters = 0;
+
+                                foreach (var item in Model)
+                                {
+                                    if (item.Meters > maxMeters)
+                                    {
+                                        maxMeters = item.Meters;
+                                    }
+                                }
+                            }
+                            @if (maxMeters > 0)
+                            {
+                                <p class="card-text fs-5">@maxMeters metros</p>
+                            }
+                            else
+                            {
+                                <p class="card-text fs-5">Ainda não há dados</p>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col">
+            <canvas class="chart-border shadow" id="runningChartSpeeds" height="123"></canvas>
+            <br />
+        </div>
+    </div>
+</div>
+<div class="container">
+    <div class="row">
+        <div class="col">
+            <canvas class="chart-border shadow" id="runningChartMinutes"></canvas>
+            <br />
+        </div>
+        <div class="col">
+            <canvas class="chart-border shadow" id="runningChartMeters"></canvas>
+            <br />
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>
+
+<script>
+    var runningData = @Html.Raw(Json.Serialize(Model));
+
+    var dataByMonthYearMinutes = {};
+    var dataByMonthYearMeters = {};
+    var dataByDaySpeeds = {};
+
+    runningData.forEach(function (entry) {
+        var date = new Date(entry.date);
+        var day = date.getDate();
+        var month = date.getMonth() + 1;
+        var year = date.getFullYear();
+        var keyMonth = month.toString().padStart(2, '0') + '/' + year.toString().slice(-2);
+        var keyDay = day.toString().padStart(2, '0') + '/' + month.toString().padStart(2, '0') + '/' + year.toString().slice(-2);
+
+        if (!dataByMonthYearMinutes[keyMonth]) {
+            dataByMonthYearMinutes[keyMonth] = 0;
+        }
+        if (!dataByMonthYearMeters[keyMonth]) {
+            dataByMonthYearMeters[keyMonth] = 0;
+        }
+
+        dataByMonthYearMinutes[keyMonth] += entry.minutes;
+        dataByMonthYearMeters[keyMonth] += entry.meters;
+
+        var distance = entry.meters;
+        var time = entry.minutes;
+
+        var speedKmH = (distance / 1000) / (time / 60);
+
+        if (!dataByDaySpeeds[keyDay]) {
+            dataByDaySpeeds[keyDay] = [];
+        }
+
+        dataByDaySpeeds[keyDay].push(speedKmH);
+    });
+
+    var labelsMinutes = Object.keys(dataByMonthYearMinutes);
+    var minutes = Object.values(dataByMonthYearMinutes);
+
+    var labelsMeters = Object.keys(dataByMonthYearMeters);
+    var meters = Object.values(dataByMonthYearMeters);
+
+    var labelsSpeedsByDay = Object.keys(dataByDaySpeeds);
+    var averageSpeedsByDay = Object.values(dataByDaySpeeds).map(speeds => {
+        const total = speeds.reduce((acc, val) => acc + val, 0);
+        return total / speeds.length;
+    });
+
+    var ctxMinutes = document.getElementById('runningChartMinutes').getContext('2d');
+    var chartMinutes = new Chart(ctxMinutes, {
+        type: 'bar',
+        data: {
+            labels: labelsMinutes,
+            datasets: [{
+                data: minutes,
+                backgroundColor: 'rgba(0,87,237, 0.5)',
+                borderColor: 'rgba(0,87,237, 1)',
+                borderWidth: 1
+            }]
+        },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    grid: {
+                        display: false
+                    }
+                },
+                x: {
+                    grid: {
+                        display: false
+                    }
+                }
+            },
+            plugins: {
+                datalabels: {
+                    anchor: 'end',
+                    align: 'end',
+                    display: true
+                },
+                legend: {
+                    display: false
+                },
+                title: {
+                    display: true,
+                    text: 'Total de minutos percorridos por mês',
+                    color: '#212529',
+                    font: {
+                        size: 16
+                    }
+                }
+            }
+        }
+    });
+
+    var ctxMeters = document.getElementById('runningChartMeters').getContext('2d');
+    var chartMeters = new Chart(ctxMeters, {
+        type: 'bar',
+        data: {
+            labels: labelsMeters,
+            datasets: [{
+                data: meters,
+                backgroundColor: 'rgba(0,216,118, 0.5)',
+                borderColor: 'rgba(0,216,118, 1)',
+                borderWidth: 1
+            }]
+        },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    grid: {
+                        display: false
+                    }
+                },
+                x: {
+                    grid: {
+                        display: false
+                    }
+                }
+            },
+            plugins: {
+                datalabels: {
+                    anchor: 'end',
+                    align: 'end',
+                    display: true
+                },
+                legend: {
+                    display: false
+                },
+                title: {
+                    display: true,
+                    text: 'Total de metros percorridos por mês',
+                    color: '#212529',
+                    font: {
+                        size: 16
+                    }
+                }
+            }
+        }
+    });
+
+    var ctxSpeedsByDay = document.getElementById('runningChartSpeeds').getContext('2d');
+    var chartSpeedsByDay = new Chart(ctxSpeedsByDay, {
+        type: 'line',
+        data: {
+            labels: labelsSpeedsByDay,
+            datasets: [{
+                data: averageSpeedsByDay,
+                fill: true,
+                borderColor: 'rgba(110,72,207)',
+                borderWidth: 4
+            }]
+        },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    grid: {
+                        display: false
+                    }
+                },
+                x: {
+                    grid: {
+                        display: true
+                    }
+                }
+            },
+            plugins: {
+                legend: {
+                    display: false
+                },
+                title: {
+                    display: true,
+                    text: 'Velocidade média (km/h) por dia',
+                    color: '#212529',
+                    font: {
+                        size: 16
+                    }
+                }
+            }
+        }
+    });
+</script>
