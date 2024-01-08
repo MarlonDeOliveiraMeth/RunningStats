@@ -1,4 +1,4 @@
-﻿@model IEnumerable<RunningStats.Models.RunningModel>
+@model IEnumerable<RunningStats.Models.RunningModel>
 
 @{
     ViewData["Title"] = "Dados";
@@ -6,6 +6,8 @@
 
 <h1>Dados</h1>
 
+<br />
+<input class="form-control" id="SearchBar" type="text" placeholder="Pesquise por metros, minutos ou data">
 <br />
 <table class="table table-striped text-center">
     <thead class="table-dark">
@@ -24,7 +26,7 @@
             </th>
         </tr>
     </thead>
-    <tbody>
+    <tbody id="RunningTable">
 @foreach (var item in Model) {
         <tr>
             <td>
@@ -44,3 +46,20 @@
 }
     </tbody>
 </table>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        document.getElementById('SearchBar').addEventListener('keyup', function () {
+            var value = this.value.toLowerCase();
+            var rows = document.querySelectorAll('#RunningTable tr');
+            rows.forEach(function (row) {
+                var text = row.textContent.toLowerCase();
+                if (text.indexOf(value) > -1) {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+        });
+    });
+</script>
