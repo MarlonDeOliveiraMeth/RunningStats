@@ -11,4 +11,4 @@ Nela, o usuário pode armazenar, editar e excluir dados, tais como a quantidade 
 ![image](https://github.com/MarlonDeOliveiraMeth/RunningStats/assets/82294838/a22e1260-d109-477c-898e-d56b2b877a65)
 
 Além disso, o usuário consegue obter uma análise sobre o seu desempenho através de um prático dashboard.
-![image](https://github.com/MarlonDeOliveiraMeth/RunningStats/assets/82294838/4fbcf050-1202-4397-be75-523751d858ce)
+![image](https://github.com/MarlonDeOliveiraMeth/RunningStats/assets/82294838/51d859fe-76bd-470c-bd39-4b235fe82384)
