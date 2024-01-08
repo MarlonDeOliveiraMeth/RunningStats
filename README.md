@@ -1,6 +1,6 @@
 # RunningStats
 
-A corrida é uma das práticas esportivas mais simples e acessíveis de todas. Basta calçar um tênis, vestir uma roupa confortável e pegar uma garrafa de água para logo estar pronto para mais um dia de exercício. Ainda assim, os benefícios dessa atividade são inúmeros: ela é capaz de ajudar na perda e manutenção do peso, reduzir o risco de doenças crônicas, fortalecer os músculos, ossos e articulações, melhorar a qualidade do sono, combater a depressão, ansiedade e estresse, e elevar a disposição física, consequentemente, aumentando a expectativa de vida do atleta.
+A corrida é uma das práticas esportivas mais simples e acessíveis de todas. Basta calçar um tênis, vestir uma roupa confortável e pegar uma garrafa de água que logo você estará pronto para mais um dia de exercícios. Ainda assim, os benefícios dessa atividade são inúmeros: ela é capaz de ajudar na perda e manutenção do peso, reduzir o risco de doenças crônicas, fortalecer os músculos, ossos e articulações, melhorar a qualidade do sono, combater a depressão, ansiedade e estresse, e elevar a disposição física, consequentemente, aumentando a expectativa de vida do atleta.
 
 Eu mesmo adoro dar uma corrida pelas ruas sempre que possível, por isso, para fins de estudo, desenvolvi esta aplicação WEB utilizando ASP.NEP Core MVC com Razor Pages, CSS, JavaScript, Bootstrap v5.0, Chart.js e banco de dados Microsoft SQL Server.
 
