@@ -5,7 +5,7 @@ A corrida é uma das práticas esportivas mais simples e acessíveis de todas. B
 Eu mesmo adoro dar uma corrida pelas ruas sempre que possível, por isso, para fins de estudo, desenvolvi esta aplicação WEB utilizando ASP.NEP Core MVC com Razor Pages, CSS, JavaScript, Bootstrap v5.0, Chart.js e banco de dados Microsoft SQL Server.
 
 Nela, o usuário pode armazenar, editar e excluir dados, tais como a quantidade de metros percorridos, os minutos gastos no trajeto e a data da corrida.
-![image](https://github.com/MarlonDeOliveiraMeth/RunningStats/assets/82294838/a7c84b01-19a3-4920-8207-8aea0dc063eb)
+![image](https://github.com/MarlonDeOliveiraMeth/RunningStats/assets/82294838/0db6a26c-0f0a-4f01-b7b8-51eb3e77321a)
 ![image](https://github.com/MarlonDeOliveiraMeth/RunningStats/assets/82294838/bc8bd521-1c37-48a4-aa21-7097518590b3)
 ![image](https://github.com/MarlonDeOliveiraMeth/RunningStats/assets/82294838/5400d1e0-2f52-4f2c-9060-d7bc6ef8a2e3)
 ![image](https://github.com/MarlonDeOliveiraMeth/RunningStats/assets/82294838/a22e1260-d109-477c-898e-d56b2b877a65)
